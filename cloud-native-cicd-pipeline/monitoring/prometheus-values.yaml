@@ -1,0 +1,29 @@
+# Values file for the kube-prometheus-stack Helm chart
+# helm install monitoring prometheus-community/kube-prometheus-stack -f monitoring/prometheus-values.yaml
+
+grafana:
+  adminPassword: change-me
+  service:
+    type: ClusterIP
+
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelectorNilUsesHelmValues: false
+    retention: 15d
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+
+additionalServiceMonitors:
+  - name: myapp-monitor
+    selector:
+      matchLabels:
+        app: myapp-myapp
+    endpoints:
+      - port: http
+        path: /metrics
+        interval: 15s
